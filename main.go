@@ -9,7 +9,9 @@ import (
 
 func main() {
 	//fmt.Println(cmd.DBGet(1))
-	App()
+	//App()
+	//cmd.FileDB("log.txt")
+	cmd.Create("log.txt", "Donald Trump for President 2024", "The rightwing will shine again")
 }
 
 func App() {
@@ -18,7 +20,7 @@ func App() {
 	fmt.Println("======================================================================================================")
 	fmt.Println("\n\n")
 	//display the list of items home page
-	itemsPage()
+	//itemsPage()
 	fmt.Println("\n\n")
 
 	//Responding to user input
@@ -41,7 +43,6 @@ func App() {
 	switch text {
 	case "-d":
 		print("delete ...")
-
 	case "-c":
 		print("create ...")
 	case "-v":
@@ -52,9 +53,9 @@ func App() {
 	}
 }
 
-func itemsPage() {
+/*func itemsPage(page cmd.Item) {
 	//populate the items struct with dbdata
-	var page []cmd.Item
+	var page cmd.Item
 	//fmt.Println(cmd.DB)
 	for i, v := range cmd.DB {
 		page = append(page, v)
@@ -62,4 +63,4 @@ func itemsPage() {
 
 	}
 
-}
+}*/

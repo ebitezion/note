@@ -17,3 +17,8 @@ func TestCreate(t *testing.T) {
 	t.Fail()
 
 }
+
+func TestReadFileDB(t *testing.T) {
+	ReadFileDB("log.txt")
+	t.Fail()
+}
