@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"time"
 )
 
 type Item struct {
@@ -41,33 +40,9 @@ var dummy = []map[string]Item{
 	{"3": {3, "my work task", "Programme the app mehn	", "12-03-21"}},
 }
 
-/*var dummydb = items{
-
-	item: []Item{{1, "my grocery task", "purchase at dollar store ok", "12-03-21"},
-		{2, "my reading task", "Read the bible back to back", "12-03-21"},
-		{3, "my work task", "Programme the app mehn	", "12-03-21"},
-	},
-}*/
 var DB = []Item{{1, "my grocery task", "purchase at dollar store ok", "12-03-21"},
 	{2, "my reading task", "Read the bible back to back", "12-03-21"},
 	{3, "my work task", "Programme the app mehn	", "12-03-21"},
-}
-
-func Create(filename, title, content string) {
-	//ReadFileDB(filename)
-	//get last id from db and increment by 1
-	lastID := 1 //len(DB)
-
-	//increment the last id by 1
-	lastID += 1
-
-	//get current date time
-	t := time.Now()
-	today := t.Format("Mon Jan _2 15:04:05 2006")
-
-	//append all param to db e.g 	{3, "my work task", "Programme the app mehn	", "12-03-21"},
-	WriteFileDB(filename, Item{int(lastID), title, content, today})
-
 }
 
 func DBGet(id int) (i Item, err error) {
@@ -83,11 +58,15 @@ func DBGet(id int) (i Item, err error) {
 }
 
 func WriteFileDB(filename string, content Item) {
+
 	//open the file
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
+
 		return
 	}
+	defer f.Close()
+
 	fmt.Fprintln(f, content)
 	//scanner := bufio.NewWriter(f)
 	/*	for _, val := range content {
@@ -102,8 +81,22 @@ func WriteFileDB(filename string, content Item) {
 
 }
 
-func Load(page *Item) {
+func LoadPage(filename string) {
+	_, items, err := ReadFileDB(filename)
 
+	if err != nil {
+		fmt.Errorf("Error %v \n", err)
+		return
+	}
+	if items == nil {
+		fmt.Errorf("Item(s) :%v \n", items)
+		return
+	}
+
+	for _, item := range items {
+		fmt.Print("TODO")
+		fmt.Println("\t", string(item[0:]), "\t", string(item[1]), "\t\t\t", string(item[5:]))
+	}
 }
 
 func ReadFileDB(filename string) (int, []string, error) {
@@ -114,19 +107,20 @@ func ReadFileDB(filename string) (int, []string, error) {
 		return 0, nil, err
 	}
 	defer f.Close()
-	scanner := bufio.NewReader(f)
+	//ioutil.ReadFile(filename)
+	scanner := bufio.NewScanner(f)
 	var (
-		i   int = 0
-		str []string
+		i        int = 0
+		str      []string
+		inputstr string
 	)
-	for {
-		inputstr, err := scanner.ReadString('\n')
-		if err != nil {
-			return 0, nil, err
-		}
+	for scanner.Scan() {
+		i++
+		inputstr = scanner.Text()
+
 		str = append(str, inputstr)
-		i += 1
 
 	}
+	println("i?", i)
 	return i, str, nil
 }
